@@ -163,10 +163,17 @@ echo "http://$(hostname -I | cut -d' ' -f1)/tar1090"
 ```
 
 ## Next Steps
-- [ ] Install ADSBexchange feeder
+- [x] Install ADSBexchange feeder (with custom socat solution!)
 - [ ] Set up MQTT bridge for real-time alerts
 - [ ] Add external antenna on 30ft tower
 - [ ] Configure GPS for automatic position/time
+
+## Success Story
+On July 13, 2025, this Pi 2 successfully tracked:
+- N694SV - Light aircraft overhead
+- AE0574 - C-5 Galaxy at 34,000ft
+- Multiple commercial flights
+All while feeding FlightAware and ADSBexchange!
 
 ## Resources
 - [readsb GitHub](https://github.com/wiedehopf/readsb)
