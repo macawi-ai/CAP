@@ -1,0 +1,45 @@
+# Readsb Build Dependencies for Raspberry Pi 2 (armv7l)
+# Discovered during our build on 2025-07-13
+
+## Core Build Tools
+build-essential
+git
+pkg-config
+make
+
+## RTL-SDR Support
+librtlsdr0
+librtlsdr-dev
+
+## Required Libraries
+libusb-1.0-0-dev      # USB support
+libncurses5-dev       # For curses.h (interactive mode)
+libzstd-dev          # Compression support
+libzstd1             # Runtime compression
+
+## Network/Protocol
+protobuf-c-compiler
+libprotobuf-c-dev
+
+## Web Interface
+lighttpd             # Web server
+lighttpd-mod-deflate # Compression support
+
+## Complete install command:
+sudo apt update
+sudo apt install -y \
+    build-essential git pkg-config make \
+    librtlsdr0 librtlsdr-dev \
+    libusb-1.0-0-dev \
+    libncurses5-dev \
+    libzstd-dev libzstd1 \
+    protobuf-c-compiler libprotobuf-c-dev \
+    lighttpd
+
+## Build command for Pi 2:
+make -j3 RTLSDR=yes OPTIMIZE="-mcpu=cortex-a7 -mfpu=neon-vfpv4"
+
+## Notes:
+- Pi 2 Model B uses Cortex-A7 CPU
+- Don't use ARM1176 optimizations (that's for Pi Zero/1)
+- The -j3 uses 3 cores (Pi 2 has 4, leaving one free)

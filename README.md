@@ -27,9 +27,14 @@ cap --lat 41.234 --lon -95.678 --range 10 --format json
 
 ## 🏗️ Architecture
 - **Core CLI Tool**: TypeScript/Node.js command-line interface
-- **Data Source**: ADSBexchange API (requires API key)
+- **Data Sources**: 
+  - ADSBexchange API (requires API key)
+  - Local Raspberry Pi receivers (readsb/tar1090)
 - **Alert System**: MQTT publishing for real-time notifications
 - **Mobile App**: React Native (future development)
+
+## 🥧 Raspberry Pi Setup
+CAP now supports direct integration with local ADS-B receivers! Check out our [Raspberry Pi Setup Guide](docs/raspberry-pi-setup.md) to turn your Pi into an aircraft tracking station.
 
 ## 🤝 Contributing
 This project aims to make aviation accessible to everyone. Contributions welcome!
