@@ -5,6 +5,7 @@
 import chalk from 'chalk';
 import { Aircraft, OutputFormat, AIRCRAFT_CATEGORIES, INTERESTING_CALLSIGNS } from '../types/aircraft';
 import { bearingToCompass, formatAltitude } from '../utils/geo';
+import { checkSpecialFlight, formatFirstLight } from '../utils/special-flights';
 
 export class Formatter {
   /**
@@ -69,7 +70,18 @@ export class Formatter {
 
       // Check for interesting callsigns
       let specialNote = '';
-      if (ac.flight) {
+      const specialFlight = checkSpecialFlight(ac.flight);
+      
+      if (specialFlight) {
+        // AAL3283 gets rainbow treatment!
+        if (specialFlight.color === 'rainbow') {
+          const colors = [chalk.red, chalk.yellow, chalk.green, chalk.cyan, chalk.blue, chalk.magenta];
+          const text = specialFlight.message;
+          specialNote = '\n   ' + text.split('').map((char, i) => colors[i % colors.length](char)).join('');
+        } else {
+          specialNote = chalk.bgMagenta.white(` ${specialFlight.message} `);
+        }
+      } else if (ac.flight) {
         for (const [type, pattern] of Object.entries(INTERESTING_CALLSIGNS)) {
           if (pattern.test(ac.flight)) {
             specialNote = chalk.bgRed.white(` ${type} `);
