@@ -81,12 +81,13 @@ export class ADSBClient {
           );
 
           // Calculate ETA if aircraft is approaching
-          processed.eta = calculateETA(
+          const eta = calculateETA(
             processed.distance,
             processed.gs,
             processed.bearing,
             processed.track
           );
+          processed.eta = eta !== null ? eta : undefined;
         }
 
         return processed;

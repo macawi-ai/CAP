@@ -38,6 +38,7 @@ program
   .option('--min-alt <feet>', 'Minimum altitude filter', parseInt)
   .option('--max-alt <feet>', 'Maximum altitude filter', parseInt)
   .option('--api-key <key>', 'ADSBexchange API key (or set ADSB_API_KEY env var)')
+  .option('--demo', 'Run in demo mode with simulated aircraft')
   .option('--no-banner', 'Suppress banner display')
   .option('--watch', 'Continuous monitoring mode (updates every 30 seconds)')
   .action(async (options) => {
@@ -52,10 +53,65 @@ program
       process.exit(1);
     }
 
+    // Check for demo mode
+    if (options.demo) {
+      console.log(chalk.yellow('🛩️  Running in DEMO mode - simulated aircraft'));
+      console.log(chalk.gray(`Monitoring airspace around ${options.lat}, ${options.lon}`));
+      console.log(chalk.gray(`Range: ${options.range} miles\n`));
+      
+      // Simulate an Air Tractor approaching
+      const demoAircraft = [
+        {
+          hex: 'a12345',
+          flight: 'N123AG',
+          type: 'AT8T',
+          lat: options.lat + 0.02,
+          lon: options.lon - 0.01,
+          alt_baro: 1150,
+          gs: 140,
+          track: 225,
+          seen: 0,
+          category: 'A0',
+          description: 'Air Tractor AT-802A - Agricultural'
+        },
+        {
+          hex: 'abc789',
+          flight: 'UAL232',
+          type: 'B738',
+          lat: options.lat + 0.3,
+          lon: options.lon + 0.2,
+          alt_baro: 35000,
+          gs: 475,
+          track: 270,
+          seen: 0,
+          category: 'A3',
+          description: 'Boeing 737-800'
+        }
+      ];
+      
+      console.log(chalk.red.bold('⚠️  LOW ALTITUDE ALERT!'));
+      console.log(chalk.red(`Agricultural aircraft N123AG at 1,150ft approaching your area!\n`));
+      
+      // Format and display
+      const output = Formatter.format(
+        demoAircraft, 
+        options.format as OutputFormat,
+        options.lat,
+        options.lon
+      );
+      console.log(output);
+      
+      if (options.watch) {
+        console.log(chalk.yellow('\n📡 Demo mode does not support watch - showing single snapshot'));
+      }
+      return;
+    }
+    
     // Get API key
     const apiKey = options.apiKey || process.env.ADSB_API_KEY;
     if (!apiKey) {
       console.error(chalk.red('Error: ADSBexchange API key required. Set ADSB_API_KEY environment variable or use --api-key'));
+      console.error(chalk.yellow('\nTip: Use --demo flag to see CAP in action with simulated aircraft'));
       process.exit(1);
     }
 
